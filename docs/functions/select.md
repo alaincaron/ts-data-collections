@@ -12,7 +12,9 @@ Locates the k-th element in the list according to specified comparator
 
 ## Type Parameters
 
-• **E**
+### E
+
+`E`
 
 ## Parameters
 

@@ -6,6 +6,7 @@ import {
   hashAny,
   hashIterableOrdered,
   hashIterableUnordered,
+  PrimitiveSink,
 } from '../../src';
 
 describe('Hash Utils', () => {
@@ -70,6 +71,35 @@ describe('Hash Utils', () => {
       ]);
       expect(hashAny(map)).to.be.a('number');
       expect(hashAny(map)).to.equal(hashAny(map));
+    });
+
+    it('should hash Symbol using their toString function', () => {
+      expect(hashAny(Symbol.iterator)).equal(hashAny(Symbol.iterator.toString()));
+    });
+
+    it('should hash object using hashCode method if present', () => {
+      class Toto {
+        hashCode() {
+          return 5;
+        }
+      }
+      const x = new Toto();
+      expect(hashAny(x)).equal(x.hashCode());
+    });
+
+    it('should hash object using toSink if present', () => {
+      class Toto {
+        toSink(sink: PrimitiveSink) {
+          sink.putNumber(5);
+          sink.putString('foobar');
+        }
+      }
+      const x = new Toto();
+      expect(hashAny(x)).equal(
+        FNV1a32HashFunction.instance()
+          .hashObject(x, (x, sink) => x.toSink(sink))
+          .asNumber()
+      );
     });
   });
 

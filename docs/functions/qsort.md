@@ -14,7 +14,9 @@ Sorts (using quicksort) an array according to the specified comparator.
 
 ### Type Parameters
 
-• **E**
+#### E
+
+`E`
 
 ### Parameters
 
@@ -38,7 +40,9 @@ Sorts (using quicksort) an array according to the specified comparator.
 
 ### Type Parameters
 
-• **E**
+#### E
+
+`E`
 
 ### Parameters
 
@@ -68,7 +72,9 @@ Sorts (using quicksort) an array according to the specified comparator.
 
 ### Type Parameters
 
-• **E**
+#### E
+
+`E`
 
 ### Parameters
 
@@ -102,7 +108,9 @@ Sorts (using quicksort) an array according to the specified comparator.
 
 ### Type Parameters
 
-• **E**
+#### E
+
+`E`
 
 ### Parameters
 

@@ -12,7 +12,9 @@ with predefined content.
 
 ## Type Parameters
 
-• **ContainerLike** _extends_ `object`
+### ContainerLike
+
+`ContainerLike` _extends_ `object`
 
 ## Properties
 

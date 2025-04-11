@@ -6,7 +6,7 @@
 
 # Type Alias: LengthProvider
 
-> **LengthProvider**: \{ `length`: [`NumberProvider`](NumberProvider.md); \} \| \{ `size`: [`NumberProvider`](NumberProvider.md); \}
+> **LengthProvider** = \{ `length`: [`NumberProvider`](NumberProvider.md); \} \| \{ `size`: [`NumberProvider`](NumberProvider.md); \}
 
 Interface for objects that can provide a numeric length or size.
 This is used to abstract over different ways of getting an object's size,

@@ -16,7 +16,9 @@ not. Some are ordered and others unordered.
 
 ## Type Parameters
 
-• **E**
+### E
+
+`E`
 
 ## Implements
 
@@ -85,7 +87,9 @@ there is enough remaining capacity.
 
 #### Type Parameters
 
-• **E1**
+##### E1
+
+`E1`
 
 #### Parameters
 
@@ -173,7 +177,7 @@ This collection.
 
 ### clone()
 
-> `abstract` **clone**(): [`AbstractCollection`](AbstractCollection.md)\<`E`\>
+> `abstract` **clone**(): `AbstractCollection`\<`E`\>
 
 Returns a clone of this `Collection`.
 
@@ -182,7 +186,7 @@ as the original one and also all other settings returned by `Collection.buildOpt
 
 #### Returns
 
-[`AbstractCollection`](AbstractCollection.md)\<`E`\>
+`AbstractCollection`\<`E`\>
 
 #### Implementation of
 
@@ -226,7 +230,9 @@ Returns true if this `Collection` contains all the elements in the specified `It
 
 #### Type Parameters
 
-• **E1**
+##### E1
+
+`E1`
 
 #### Parameters
 
@@ -471,7 +477,9 @@ added one by one until all items are added or the `Collection` is
 
 #### Type Parameters
 
-• **E1**
+##### E1
+
+`E1`
 
 #### Parameters
 

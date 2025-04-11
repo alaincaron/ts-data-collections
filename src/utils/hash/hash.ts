@@ -31,7 +31,7 @@ const BUFFER_TYPES = new Set([
 
 export function hashAny(x: any, hashFunction?: HashFunction): number {
   if (x === null || x === undefined) return 0;
-  if (x.hashCode === 'function') return x.hashCode();
+  if (typeof x.hashCode === 'function') return x.hashCode();
   hashFunction ??= FNV1a32HashFunction.instance();
   switch (typeof x) {
     case 'string':
@@ -46,6 +46,11 @@ export function hashAny(x: any, hashFunction?: HashFunction): number {
     case 'bigint':
       return hashFunction.hashNumber(Number(BigInt.asIntN(32, x))).asNumber();
     default:
+      if (typeof x.toSink === 'function') {
+        const hasher = hashFunction.newHasher();
+        x.toSink(hasher);
+        return hasher.hash().asNumber();
+      }
       if (x instanceof Set || x instanceof Map) return hashIterableUnordered(x, hashFunction);
       if (x instanceof ArrayBuffer) return hashFunction.hashBytes(Buffer.from(x)).asNumber();
       if (BUFFER_TYPES.has(x.constructor)) return hashFunction.hashBytes(Buffer.from(x)).asNumber();
