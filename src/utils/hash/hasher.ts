@@ -13,7 +13,7 @@ export interface HashCode {
 }
 
 abstract class NumericHashCode implements HashCode {
-  constructor(private readonly value: number) {}
+  protected constructor(private readonly value: number) {}
 
   asNumber() {
     return this.value;
