@@ -20,10 +20,6 @@ not. Some are ordered and others unordered.
 
 `E`
 
-## Implements
-
-- `MutableCollection`\<`E`\>
-
 ## Methods
 
 ### \[iterator\]()
