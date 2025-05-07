@@ -82,6 +82,6 @@
     "dist"
   ],
   "dependencies": {
-    "ts-fluent-iterators": "14.1.3"
+    "ts-fluent-iterators": "14.2.0"
   }
 }
