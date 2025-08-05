@@ -4,7 +4,7 @@
 
 [ts-data-collections](../README.md) / AbstractCollection
 
-# Class: `abstract` AbstractCollection\<E\>
+# Abstract Class: AbstractCollection\<E\>
 
 A `Collection` represents a group of objects, known as its
 elements. Some collections allow duplicate elements and others do

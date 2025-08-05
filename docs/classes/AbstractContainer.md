@@ -4,7 +4,7 @@
 
 [ts-data-collections](../README.md) / AbstractContainer
 
-# Class: `abstract` AbstractContainer
+# Abstract Class: AbstractContainer
 
 A `Container` is an object that can contain objects.
 
