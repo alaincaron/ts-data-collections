@@ -1,60 +1,47 @@
-import { Collector } from 'ts-fluent-iterators';
 import { HashMapOptions, LinkedHashMapOptions, SortedMapOptions } from '../maps';
 import {
   AvlTreeMultiSet,
   HashMultiSet,
   LinkedHashMultiSet,
-  MutableMultiSet,
   OpenHashMultiSet,
   SkipListMultiSet,
   SplayTreeMultiSet,
 } from '../multisets';
 import { WithCapacity } from '../utils';
-
-export class MultiSetCollector<E, MS extends MutableMultiSet<E>> implements Collector<E, MS> {
-  constructor(private readonly ms: MS) {}
-
-  collect(e: E) {
-    this.ms.add(e);
-  }
-
-  get result(): MS {
-    return this.ms;
-  }
-}
+import { CollectionCollector } from './collection_collectors';
 
 export function hashMultiSetCollector<E>(
   arg?: HashMultiSet<E> | WithCapacity<HashMapOptions>
-): MultiSetCollector<E, HashMultiSet<E>> {
-  return new MultiSetCollector(arg instanceof HashMultiSet ? arg : HashMultiSet.create(arg));
+): CollectionCollector<E, HashMultiSet<E>> {
+  return new CollectionCollector(arg instanceof HashMultiSet ? arg : HashMultiSet.create(arg));
 }
 
 export function linkedHashMultiSetCollector<E>(
   arg?: LinkedHashMultiSet<E> | WithCapacity<LinkedHashMapOptions>
-): MultiSetCollector<E, LinkedHashMultiSet<E>> {
-  return new MultiSetCollector(arg instanceof LinkedHashMultiSet ? arg : LinkedHashMultiSet.create(arg));
+): CollectionCollector<E, LinkedHashMultiSet<E>> {
+  return new CollectionCollector(arg instanceof LinkedHashMultiSet ? arg : LinkedHashMultiSet.create(arg));
 }
 
 export function openHashMultiSetCollector<E>(
   arg?: OpenHashMultiSet<E> | WithCapacity<HashMapOptions>
-): MultiSetCollector<E, OpenHashMultiSet<E>> {
-  return new MultiSetCollector(arg instanceof OpenHashMultiSet ? arg : OpenHashMultiSet.create(arg));
+): CollectionCollector<E, OpenHashMultiSet<E>> {
+  return new CollectionCollector(arg instanceof OpenHashMultiSet ? arg : OpenHashMultiSet.create(arg));
 }
 
 export function splayTreeMultiSetCollector<E>(
   arg?: SplayTreeMultiSet<E> | WithCapacity<SortedMapOptions<E>>
-): MultiSetCollector<E, SplayTreeMultiSet<E>> {
-  return new MultiSetCollector(arg instanceof SplayTreeMultiSet ? arg : SplayTreeMultiSet.create(arg));
+): CollectionCollector<E, SplayTreeMultiSet<E>> {
+  return new CollectionCollector(arg instanceof SplayTreeMultiSet ? arg : SplayTreeMultiSet.create(arg));
 }
 
 export function avlTreeMultiSetCollector<E>(
   arg?: AvlTreeMultiSet<E> | WithCapacity<SortedMapOptions<E>>
-): MultiSetCollector<E, AvlTreeMultiSet<E>> {
-  return new MultiSetCollector(arg instanceof AvlTreeMultiSet ? arg : AvlTreeMultiSet.create(arg));
+): CollectionCollector<E, AvlTreeMultiSet<E>> {
+  return new CollectionCollector(arg instanceof AvlTreeMultiSet ? arg : AvlTreeMultiSet.create(arg));
 }
 
 export function skipListMultiSetCollector<E>(
   arg?: SkipListMultiSet<E> | WithCapacity<SortedMapOptions<E>>
-): MultiSetCollector<E, SkipListMultiSet<E>> {
-  return new MultiSetCollector(arg instanceof SkipListMultiSet ? arg : SkipListMultiSet.create(arg));
+): CollectionCollector<E, SkipListMultiSet<E>> {
+  return new CollectionCollector(arg instanceof SkipListMultiSet ? arg : SkipListMultiSet.create(arg));
 }
