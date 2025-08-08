@@ -1,3 +1,4 @@
+export * from './bimap_collectors';
 export * from './collection_collectors';
 export * from './list_collectors';
 export * from './map_collectors';

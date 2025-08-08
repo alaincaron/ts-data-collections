@@ -12,10 +12,7 @@ import {
 import { WithCapacity } from '../utils';
 
 export class MultiMapCollector<K, V, M extends MutableMultiMap<K, V>> implements Collector<[K, V], M> {
-  private readonly m: M;
-  constructor(factory: M | (new () => M)) {
-    this.m = typeof factory === 'function' ? new factory() : factory;
-  }
+  constructor(private readonly m: M) {}
 
   collect([k, v]: [K, V]) {
     this.m.put(k, v);

@@ -1,14 +1,14 @@
 import { BiMap, BiMapOptions } from './bimap';
-import { AvlTreeMap, MapInitializer, SortedMapOptions } from '../maps';
+import { MapInitializer, SortedMapOptions, SplayTreeMap } from '../maps';
 import { WithCapacity } from '../utils';
 import { MutableBiMap } from './bimap_interface';
 
-export function createAvlTreeBiMap<K, V>(
+export function createSplayTreeBiMap<K, V>(
   initializer?: WithCapacity<BiMapOptions<SortedMapOptions<K>, SortedMapOptions<V>> & MapInitializer<K, V>>
 ): MutableBiMap<K, V> {
-  return BiMap.create<K, V, AvlTreeMap<K, V>, AvlTreeMap<V, K>, SortedMapOptions<K>, SortedMapOptions<V>>(
-    AvlTreeMap,
-    AvlTreeMap,
+  return BiMap.create<K, V, SplayTreeMap<K, V>, SplayTreeMap<V, K>, SortedMapOptions<K>, SortedMapOptions<V>>(
+    SplayTreeMap,
+    SplayTreeMap,
     initializer
   );
 }
