@@ -4,10 +4,10 @@ import { MutableSortedSet } from './sorted_set';
 import { MutableSortedMap, SortedMapOptions } from '../maps';
 
 export abstract class SortedMapBasedSet<
-    E,
-    M extends MutableSortedMap<E, boolean>,
-    Options extends SortedMapOptions<E> = SortedMapOptions<E>,
-  >
+  E,
+  M extends MutableSortedMap<E, boolean>,
+  Options extends SortedMapOptions<E> = SortedMapOptions<E>,
+>
   extends MapBasedSet<E, M, Options>
   implements MutableSortedSet<E>
 {

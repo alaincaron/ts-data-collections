@@ -6,10 +6,10 @@ import { MutableMapEntry, MutableNavigableMap, SortedMapOptions } from '../maps'
 import { UnderflowException } from '../utils';
 
 export abstract class AbstractNavigableMultiSet<
-    E,
-    M extends MutableNavigableMap<E, number>,
-    Options extends SortedMapOptions<E> = SortedMapOptions<E>,
-  >
+  E,
+  M extends MutableNavigableMap<E, number>,
+  Options extends SortedMapOptions<E> = SortedMapOptions<E>,
+>
   extends AbstractSortedMultiSet<E, M, Options>
   implements MutableNavigableMultiSet<E>
 {

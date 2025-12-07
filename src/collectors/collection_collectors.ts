@@ -2,9 +2,11 @@ import { Collector, Constructor } from 'ts-fluent-iterators';
 import { MutableCollection } from '../collections';
 import { WithCapacity } from '../utils';
 
-export class CollectionCollector<A, C extends MutableCollection<A>, Options extends object = object>
-  implements Collector<A, C>
-{
+export class CollectionCollector<
+  A,
+  C extends MutableCollection<A>,
+  Options extends object = object,
+> implements Collector<A, C> {
   private readonly c: C;
 
   constructor(c: C);

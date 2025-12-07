@@ -302,7 +302,7 @@ the number of elements removed from this `Collection`
 
 ### find()
 
-> **find**(`predicate`): `undefined` \| `E`
+> **find**(`predicate`): `E` \| `undefined`
 
 Finds an item for which the argument `predicate` evaluates to `true`.
 
@@ -316,7 +316,7 @@ the predicate used to select an item
 
 #### Returns
 
-`undefined` \| `E`
+`E` \| `undefined`
 
 An item for which the `predicate` evaluates to `true` or
 `undefined`
@@ -581,7 +581,7 @@ The comparison for equality is made using the function equalsAny.
 
 ### removeMatchingItem()
 
-> `abstract` **removeMatchingItem**(`predicate`): `undefined` \| `E`
+> `abstract` **removeMatchingItem**(`predicate`): `E` \| `undefined`
 
 Removes an item for which the `predicate` returns `true`.
 
@@ -595,7 +595,7 @@ The predicate that is being evaluated for each element.
 
 #### Returns
 
-`undefined` \| `E`
+`E` \| `undefined`
 
 the element removed from the `Collection` or `undefined`
 if there are no items for which the `predicate` evaluated to

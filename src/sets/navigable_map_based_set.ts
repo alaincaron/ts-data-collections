@@ -4,10 +4,10 @@ import { SortedMapBasedSet } from './sorted_map_based_set';
 import { MutableNavigableMap, SortedMapOptions } from '../maps';
 
 export abstract class NavigableMapBasedSet<
-    E,
-    M extends MutableNavigableMap<E, boolean>,
-    Options extends SortedMapOptions<E>,
-  >
+  E,
+  M extends MutableNavigableMap<E, boolean>,
+  Options extends SortedMapOptions<E>,
+>
   extends SortedMapBasedSet<E, M, Options>
   implements MutableNavigableSet<E>
 {

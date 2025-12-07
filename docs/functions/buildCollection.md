@@ -32,7 +32,7 @@ Builds a `Collection`
 
 ### factory
 
-`Constructor`\<`C`, \[`undefined` \| `Options`\]\>
+`Constructor`\<`C`, \[`Options` \| `undefined`\]\>
 
 ### initializer?
 

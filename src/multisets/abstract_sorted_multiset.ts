@@ -5,10 +5,10 @@ import { MutableSortedMultiSet } from './mutable_sorted_multiset';
 import { MutableSortedMap, SortedMapOptions } from '../maps';
 
 export abstract class AbstractSortedMultiSet<
-    E,
-    M extends MutableSortedMap<E, number>,
-    Options extends SortedMapOptions<E> = SortedMapOptions<E>,
-  >
+  E,
+  M extends MutableSortedMap<E, number>,
+  Options extends SortedMapOptions<E> = SortedMapOptions<E>,
+>
   extends MapBasedMultiSet<E, M, Options>
   implements MutableSortedMultiSet<E>
 {

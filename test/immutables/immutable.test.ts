@@ -289,7 +289,7 @@ describe('Immutable', () => {
       expect(set.equals(Immutable.singletonSet(1))).to.be.true;
     });
     it('should return a sorted set', () => {
-      const arr = Array.from({ length: 10 }, () => Math.floor(Math.random() * 100000));
+      const arr = Array.from({ length: 10 }, (_, i) => i).shuffle();
       const set = Immutable.navigableSetOf(Comparators.natural, ...arr);
       expect(set).to.be.instanceOf(ImmutableNavigableSet);
       expect(set.toArray()).eql(arr.sort(Comparators.natural));

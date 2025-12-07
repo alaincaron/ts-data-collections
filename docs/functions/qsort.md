@@ -56,7 +56,7 @@ The array to be sorted
 
 Optional start index or comparator function
 
-`undefined` | `number` | `Comparator`\<`E`\>
+`number` | `Comparator`\<`E`\> | `undefined`
 
 ### Returns
 
@@ -92,7 +92,7 @@ The array to be sorted
 
 Optional end index or comparator function
 
-`undefined` | `number` | `Comparator`\<`E`\>
+`number` | `Comparator`\<`E`\> | `undefined`
 
 ### Returns
 
@@ -130,7 +130,7 @@ The array to be sorted
 
 #### comparator
 
-`undefined` | `Comparator`\<`E`\>
+`Comparator`\<`E`\> | `undefined`
 
 ### Returns
 
