@@ -1,4 +1,4 @@
-import { Comparator, Comparators, FluentIterator, Predicate } from 'ts-fluent-iterators';
+import { BinaryPredicate, Comparator, Comparators, FluentIterator } from 'ts-fluent-iterators';
 import { AbstractMap } from './abstract_map';
 import { MutableMapEntry } from './mutable_map';
 import { MutableSortedMap } from './sorted_map';
@@ -31,8 +31,8 @@ export abstract class AbstractSortedMap<K, V> extends AbstractMap<K, V> implemen
     return this.lastEntry()?.key;
   }
 
-  filterEntries(predicate: Predicate<[K, V]>): number {
-    const partitions = new FluentIterator(this.entries()).groupBy(predicate);
+  filterEntries(predicate: BinaryPredicate<K, V>): number {
+    const partitions = new FluentIterator(this.entries()).groupBy(([k, v]) => predicate(k, v));
     const entriesToKeep = partitions.get(true) ?? [];
     const entriesToDelete = partitions.get(false) ?? [];
     if (entriesToKeep.length < entriesToDelete.length) {

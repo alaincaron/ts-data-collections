@@ -1,4 +1,4 @@
-import { FluentIterator } from 'ts-fluent-iterators';
+import { BinaryConsumer, FluentIterator } from 'ts-fluent-iterators';
 import { isMap, NavigableMap } from '../maps';
 import { hashIterableUnordered } from '../utils';
 
@@ -82,6 +82,12 @@ class EmptyMap<K, V> implements NavigableMap<K, V> {
   get(_k: K) {
     return undefined;
   }
+
+  getOrDefault(_k: K, defaultValue: V) {
+    return defaultValue;
+  }
+
+  forEach(_consumer: BinaryConsumer<K, V>) {}
 
   containsKey(_: K) {
     return false;

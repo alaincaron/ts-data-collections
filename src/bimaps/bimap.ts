@@ -1,4 +1,4 @@
-import { Constructor, FluentIterator, Predicate } from 'ts-fluent-iterators';
+import { BinaryPredicate, Constructor, FluentIterator, Predicate } from 'ts-fluent-iterators';
 import { MutableBiMap, ReadOnlyBiMap } from './bimap_interface';
 import { MapInitializer, MapLike, MutableMap, OfferResult } from '../maps';
 import {
@@ -116,7 +116,7 @@ export class BiMap<K, V> extends AbstractContainer implements MutableBiMap<K, V>
     return true;
   }
 
-  filterEntries(predicate: Predicate<[K, V]>) {
+  filterEntries(predicate: BinaryPredicate<K, V>) {
     const result = this.keyMapping.filterEntries(predicate);
     if (result > 0) {
       this.valueMapping.filterValues(k => this.keyMapping.containsKey(k));
@@ -125,11 +125,11 @@ export class BiMap<K, V> extends AbstractContainer implements MutableBiMap<K, V>
   }
 
   filterKeys(predicate: Predicate<K>) {
-    return this.filterEntries(([k, _]) => predicate(k));
+    return this.filterEntries((k, _) => predicate(k));
   }
 
   filterValues(predicate: Predicate<V>) {
-    return this.filterEntries(([_, v]) => predicate(v));
+    return this.filterEntries((_, v) => predicate(v));
   }
 
   clear(): this {

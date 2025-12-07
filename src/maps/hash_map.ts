@@ -1,4 +1,4 @@
-import { FluentIterator, Predicate } from 'ts-fluent-iterators';
+import { BinaryPredicate, FluentIterator } from 'ts-fluent-iterators';
 import { AbstractMap, buildMap } from './abstract_map';
 import { MapInitializer, MutableMapEntry } from './mutable_map';
 import { equalsAny, hashAny, LARGEST_PRIME, nextPrime, WithCapacity } from '../utils';
@@ -62,6 +62,14 @@ export class HashMap<K, V> extends AbstractMap<K, V> {
   }
 
   put(key: K, value: V): V | undefined {
+    return this.doPut(key, value, true);
+  }
+
+  putIfAbsent(key: K, value: V): V | undefined {
+    return this.doPut(key, value, false);
+  }
+
+  private doPut(key: K, value: V, updateExisting: boolean): V | undefined {
     const hash = hashAny(key);
     const slot = this.getSlot(hash, this.slots);
     let prev: HashEntry<K, V> | undefined = undefined;
@@ -85,8 +93,10 @@ export class HashMap<K, V> extends AbstractMap<K, V> {
       return undefined;
     } else {
       const old = e.value;
-      e.value = value;
-      this.recordAccess(e, AccessType.MODIFY);
+      if (updateExisting) {
+        e.value = value;
+        this.recordAccess(e, AccessType.MODIFY);
+      }
       return old;
     }
   }
@@ -137,13 +147,13 @@ export class HashMap<K, V> extends AbstractMap<K, V> {
     return this.removeEntry(key)?.value;
   }
 
-  filterEntries(predicate: Predicate<[K, V]>): number {
+  filterEntries(predicate: BinaryPredicate<K, V>): number {
     let count = 0;
     for (let i = 0; i < this.slots.length; ++i) {
       let prev: HashEntry<K, V> | undefined = undefined;
       let e = this.slots[i];
       while (e) {
-        if (!predicate([e.key, e.value])) {
+        if (!predicate(e.key, e.value)) {
           if (prev) {
             prev.next = e.next;
           } else {

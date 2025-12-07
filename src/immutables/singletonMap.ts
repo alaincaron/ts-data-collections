@@ -1,4 +1,4 @@
-import { FluentIterator } from 'ts-fluent-iterators';
+import { BinaryConsumer, FluentIterator } from 'ts-fluent-iterators';
 import { isMap, MapEntry, SortedMap } from '../maps';
 import { equalsAny, hashIterableUnordered, mapToJSON } from '../utils';
 
@@ -51,6 +51,14 @@ export class SingletonMap<K, V> implements SortedMap<K, V> {
 
   get(key: K): V | undefined {
     return equalsAny(this.entry.key, key) ? this.entry.value : undefined;
+  }
+
+  getOrDefault(key: K, defaultValue: V) {
+    return this.get(key) ?? defaultValue;
+  }
+
+  forEach(consumer: BinaryConsumer<K, V>) {
+    consumer(this.entry.key, this.entry.value);
   }
 
   containsKey(key: K): boolean {

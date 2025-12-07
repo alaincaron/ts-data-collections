@@ -1,4 +1,4 @@
-import { Predicate } from 'ts-fluent-iterators';
+import { BinaryPredicate } from 'ts-fluent-iterators';
 import { AbstractMap, buildMap } from './abstract_map';
 import { MapInitializer, MutableMapEntry } from './mutable_map';
 import { OverflowException, WithCapacity } from '../utils';
@@ -70,12 +70,12 @@ export class AdapterMap<K, V> extends AbstractMap<K, V> {
     return old_value;
   }
 
-  filterEntries(predicate: Predicate<[K, V]>): number {
+  filterEntries(predicate: BinaryPredicate<K, V>): number {
     let count = 0;
-    for (const entry of this._delegate) {
-      if (!predicate(entry)) {
+    for (const [key, value] of this._delegate) {
+      if (!predicate(key, value)) {
         ++count;
-        this._delegate.delete(entry[0]);
+        this._delegate.delete(key);
       }
     }
     return count;

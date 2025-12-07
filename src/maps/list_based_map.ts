@@ -1,4 +1,4 @@
-import { Comparator, Comparators, Constructor, Predicate } from 'ts-fluent-iterators';
+import { BinaryPredicate, Comparator, Comparators, Constructor } from 'ts-fluent-iterators';
 import { AbstractMap } from './abstract_map';
 import { MapInitializer, MapLike, MutableMapEntry } from './mutable_map';
 import { ArrayList, LinkedList, MutableList } from '../lists';
@@ -55,12 +55,18 @@ export abstract class ListBasedMap<
     return oldValue;
   }
 
+  putIfAbsent(key: K, value: V): V | undefined {
+    const entry = this.getEntry(key);
+    if (!entry) this._delegate.add({ key, value });
+    return entry?.value;
+  }
+
   remove(key: K) {
     return this._delegate.removeFirstMatchingItem(e => equalsAny(e.key, key))?.value;
   }
 
-  filterEntries(predicate: Predicate<[K, V]>) {
-    return this._delegate.filter(e => predicate([e.key, e.value]));
+  filterEntries(predicate: BinaryPredicate<K, V>) {
+    return this._delegate.filter(e => predicate(e.key, e.value));
   }
 
   entryIterator() {

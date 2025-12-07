@@ -1,4 +1,4 @@
-import { FluentIterator, Predicate } from 'ts-fluent-iterators';
+import { BinaryPredicate, FluentIterator } from 'ts-fluent-iterators';
 import { AbstractMap, buildMap } from './abstract_map';
 import { HashMapOptions } from './hash_map';
 import { MapInitializer, MutableMapEntry } from './mutable_map';
@@ -49,11 +49,11 @@ export class OpenHashMap<K, V> extends AbstractMap<K, V> {
     return this;
   }
 
-  filterEntries(predicate: Predicate<[K, V]>) {
+  filterEntries(predicate: BinaryPredicate<K, V>) {
     let count = 0;
     for (let i = 0; i < this.slots.length; ++i) {
       const e = this.slots[i];
-      if (!e || e === DELETED || predicate([e.key, e.value])) continue;
+      if (!e || e === DELETED || predicate(e.key, e.value)) continue;
       this.slots[i] = DELETED;
       --this._size;
       ++count;
@@ -116,6 +116,14 @@ export class OpenHashMap<K, V> extends AbstractMap<K, V> {
   }
 
   put(key: K, value: V) {
+    return this.doPut(key, value, true);
+  }
+
+  putIfAbsent(key: K, value: V) {
+    return this.doPut(key, value, false);
+  }
+
+  private doPut(key: K, value: V, updateExisting: boolean) {
     const h = hashAny(key);
     let idx = this.findIndexForInsertion(key, h, this.slots);
     if (idx < 0) {
@@ -136,7 +144,7 @@ export class OpenHashMap<K, V> extends AbstractMap<K, V> {
       return undefined;
     }
     const old_value = e.value;
-    e.value = value;
+    if (updateExisting) e.value = value;
     return old_value;
   }
 

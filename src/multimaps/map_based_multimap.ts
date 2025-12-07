@@ -1,4 +1,4 @@
-import { Constructor, Predicate, SumCollector } from 'ts-fluent-iterators';
+import { BinaryPredicate, Constructor, Predicate, SumCollector } from 'ts-fluent-iterators';
 import { AbstractMultiMap } from './abstract_multimap';
 import { MutableCollection } from '../collections';
 import { ArrayList } from '../lists';
@@ -79,13 +79,13 @@ export abstract class MapBasedMultiMap<K, V> extends AbstractMultiMap<K, V> {
     return initial_size - this.size();
   }
 
-  filterEntries(predicate: Predicate<[K, V]>): number {
+  filterEntries(predicate: BinaryPredicate<K, V>): number {
     const nbRemoved = this.map
       .entryIterator()
-      .map(e => e.value.filter(v => predicate([e.key, v])))
+      .map(e => e.value.filter(v => predicate(e.key, v)))
       .collectTo(new SumCollector());
     if (nbRemoved) {
-      this.map.filterEntries(([_, c]) => !c.isEmpty());
+      this.map.filterEntries((_, c) => !c.isEmpty());
     }
     return nbRemoved;
   }

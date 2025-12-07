@@ -1,4 +1,4 @@
-import { FluentIterator, Predicate } from 'ts-fluent-iterators';
+import { BinaryPredicate, FluentIterator, Predicate } from 'ts-fluent-iterators';
 import { MultiMap } from './multimap';
 import { MutableCollection } from '../collections';
 import { MapLike } from '../maps';
@@ -22,7 +22,7 @@ export interface MutableMultiMap<K, V> extends MultiMap<K, V> {
 
   filterKeys(predicate: Predicate<K>): number;
 
-  filterEntries(predicate: Predicate<[K, V]>): number;
+  filterEntries(predicate: BinaryPredicate<K, V>): number;
 
   filterValues(predicate: Predicate<V>): number;
 

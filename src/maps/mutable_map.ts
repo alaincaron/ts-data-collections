@@ -1,4 +1,4 @@
-import { FluentIterator, Mapper, Predicate } from 'ts-fluent-iterators';
+import { BinaryMapper, BinaryPredicate, FluentIterator, Mapper, Predicate } from 'ts-fluent-iterators';
 import { IMap, MapEntry, MapLike } from './map_interface';
 
 export interface MutableMapEntry<K, V> extends MapEntry<K, V> {
@@ -11,11 +11,15 @@ export interface OfferResult<V> {
 }
 
 export interface MutableMap<K, V> extends IMap<K, V> {
+  computeIfAbsent(key: K, mapper: Mapper<K, V | undefined | null>): V | undefined;
+  computeIfPresent(key: K, mapper: BinaryMapper<K, V, V | undefined | null>): V | undefined;
+
   getEntry(key: K): MutableMapEntry<K, V> | undefined;
 
   offer(key: K, value: V): OfferResult<V>;
 
   put(key: K, value: V): V | undefined;
+  putIfAbsent(key: K, value: V): V | undefined;
 
   remove(key: K): V | undefined;
 
@@ -23,7 +27,7 @@ export interface MutableMap<K, V> extends IMap<K, V> {
 
   filterValues(predicate: Predicate<V>): number;
 
-  filterEntries(predicate: Predicate<[K, V]>): number;
+  filterEntries(predicate: BinaryPredicate<K, V>): number;
 
   putAll<K1 extends K, V1 extends V>(map: MapLike<K1, V1>): void;
 
@@ -31,8 +35,11 @@ export interface MutableMap<K, V> extends IMap<K, V> {
 
   entryIterator(): FluentIterator<MutableMapEntry<K, V>>;
 
-  replaceValueIf(predicate: Predicate<[K, V]>, mapper: Mapper<V, V>): MutableMap<K, V>;
+  replace(key: K, value: V): V | undefined;
+  replaceValue(key: K, oldValue: V, newValue: V): boolean;
 
+  replaceValueIf(predicate: BinaryPredicate<K, V>, mapper: BinaryMapper<K, V, V>): MutableMap<K, V>;
+  replaceAll(mapper: BinaryMapper<K, V, V>): MutableMap<K, V>;
   transformValues(mapper: Mapper<V, V>): MutableMap<K, V>;
 
   mapValues<V2>(mapper: Mapper<V, V2>): MutableMap<K, V2>;

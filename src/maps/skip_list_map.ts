@@ -1,4 +1,4 @@
-import { FluentIterator, iterator, Predicate } from 'ts-fluent-iterators';
+import { BinaryPredicate, FluentIterator, iterator } from 'ts-fluent-iterators';
 import { buildMap } from './abstract_map';
 import { AbstractNavigableMap } from './abstract_navigable_map';
 import { SortedMapOptions } from './abstract_sorted_map';
@@ -44,12 +44,20 @@ export class SkipListMap<K, V> extends AbstractNavigableMap<K, V> {
     return this._size;
   }
 
+  putIfAbsent(key: K, value: V): V | undefined {
+    return this.doPut(key, value, false);
+  }
+
   put(key: K, value: V): V | undefined {
+    return this.doPut(key, value, true);
+  }
+
+  private doPut(key: K, value: V, updateExisting: boolean): V | undefined {
     const { node, exact } = this.findNodeEntry(key);
 
     if (node && exact) {
       const oldValue = node.value;
-      node.value = value;
+      if (updateExisting) node.value = value;
       return oldValue;
     }
 
@@ -164,10 +172,10 @@ export class SkipListMap<K, V> extends AbstractNavigableMap<K, V> {
     --this._size;
   }
 
-  filterEntries(predicate: Predicate<[K, V]>): number {
+  filterEntries(predicate: BinaryPredicate<K, V>): number {
     const original_size = this.size();
     for (const e of this._layers[0].entries()) {
-      if (!predicate([e.key, e.value])) {
+      if (!predicate(e.key, e.value)) {
         this.removeEntry(e);
       }
     }

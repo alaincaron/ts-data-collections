@@ -1,4 +1,12 @@
-import { Constructor, FluentIterator, Mapper, Predicate } from 'ts-fluent-iterators';
+import {
+  BinaryConsumer,
+  BinaryMapper,
+  BinaryPredicate,
+  Constructor,
+  FluentIterator,
+  Mapper,
+  Predicate,
+} from 'ts-fluent-iterators';
 import { MapInitializer, MapLike, MutableMap, MutableMapEntry, OfferResult } from './mutable_map';
 import {
   AbstractContainer,
@@ -18,6 +26,15 @@ export abstract class AbstractMap<K, V> extends AbstractContainer implements Mut
 
   get(key: K): V | undefined {
     return this.getEntry(key)?.value;
+  }
+
+  getOrDefault(key: K, defaultValue: V) {
+    const entry = this.getEntry(key);
+    return entry ? entry.value : defaultValue;
+  }
+
+  forEach(consumer: BinaryConsumer<K, V>) {
+    this.entryIterator().forEach(e => consumer(e.key, e.value));
   }
 
   protected overflowHandler(_key: K, _value: V): boolean {
@@ -49,6 +66,12 @@ export abstract class AbstractMap<K, V> extends AbstractContainer implements Mut
 
   abstract put(key: K, value: V): V | undefined;
 
+  putIfAbsent(key: K, value: V): V | undefined {
+    const entry = this.getEntry(key);
+    if (!entry) this.put(key, value);
+    return entry?.value;
+  }
+
   containsKey(key: K) {
     return !!this.getEntry(key);
   }
@@ -60,14 +83,14 @@ export abstract class AbstractMap<K, V> extends AbstractContainer implements Mut
   abstract remove(key: K): V | undefined;
 
   filterKeys(predicate: Predicate<K>) {
-    return this.filterEntries(([k, _]) => predicate(k));
+    return this.filterEntries((k, _) => predicate(k));
   }
 
   filterValues(predicate: Predicate<V>) {
-    return this.filterEntries(([_, v]) => predicate(v));
+    return this.filterEntries((_, v) => predicate(v));
   }
 
-  abstract filterEntries(predicate: Predicate<[K, V]>): number;
+  abstract filterEntries(predicate: BinaryPredicate<K, V>): number;
 
   putAll<K1 extends K, V1 extends V>(map: MapLike<K1, V1>) {
     FluentIterator.from(map).forEach(([k, v]) => this.put(k, v));
@@ -99,10 +122,31 @@ export abstract class AbstractMap<K, V> extends AbstractContainer implements Mut
     }
   }
 
-  replaceValueIf(predicate: Predicate<[K, V]>, mapper: Mapper<V, V>): AbstractMap<K, V> {
+  replace(key: K, value: V) {
+    const entry = this.getEntry(key);
+    const oldValue = entry?.value;
+    if (entry) entry.value = value;
+    return oldValue;
+  }
+
+  replaceValue(key: K, oldValue: V, newValue: V) {
+    const entry = this.getEntry(key);
+    if (entry && entry.value === oldValue) {
+      entry.value = newValue;
+      return true;
+    }
+    return false;
+  }
+
+  replaceValueIf(predicate: BinaryPredicate<K, V>, mapper: BinaryMapper<K, V, V>) {
     this.entryIterator()
-      .filter(e => predicate([e.key, e.value]))
-      .forEach(e => (e.value = mapper(e.value)));
+      .filter(e => predicate(e.key, e.value))
+      .forEach(e => (e.value = mapper(e.key, e.value)));
+    return this;
+  }
+
+  replaceAll(mapper: BinaryMapper<K, V, V>) {
+    this.entryIterator().forEach(e => (e.value = mapper(e.key, e.value)));
     return this;
   }
 
@@ -115,6 +159,30 @@ export abstract class AbstractMap<K, V> extends AbstractContainer implements Mut
     const result = this.clone() as AbstractMap<K, unknown>;
     result.entryIterator().forEach(e => (e.value = mapper(e.value as V)));
     return result as MutableMap<K, V2>;
+  }
+
+  computeIfAbsent(key: K, mapper: Mapper<K, V | undefined | null>): V | undefined {
+    const entry = this.getEntry(key);
+    if (entry) return entry.value;
+
+    const newV = mapper(key);
+    if (newV != null) {
+      this.put(key, newV);
+      return newV;
+    }
+    return undefined;
+  }
+
+  computeIfPresent(key: K, mapper: BinaryMapper<K, V, V | undefined | null>): V | undefined {
+    const entry = this.getEntry(key);
+    if (!entry) return undefined;
+    const newV = mapper(key, entry.value);
+    if (newV != null) {
+      entry.value = newV;
+      return newV;
+    }
+    this.remove(key);
+    return undefined;
   }
 
   toMap() {

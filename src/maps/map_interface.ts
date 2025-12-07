@@ -1,4 +1,4 @@
-import { ArrayGenerator, FluentIterator } from 'ts-fluent-iterators';
+import { ArrayGenerator, BinaryConsumer, FluentIterator } from 'ts-fluent-iterators';
 import { Container, ContainerInitializer, LengthProvider } from '../utils';
 
 export interface MapEntry<K, V> {
@@ -24,6 +24,8 @@ export interface IMap<K, V> extends Container, Iterable<[K, V]> {
 
   get(key: K): V | undefined;
 
+  getOrDefault(key: K, defaultValue: V): V;
+
   containsKey(key: K): boolean;
 
   containsValue(value: V): boolean;
@@ -41,6 +43,8 @@ export interface IMap<K, V> extends Container, Iterable<[K, V]> {
   entryIterator(): FluentIterator<MapEntry<K, V>>;
 
   entries(): IterableIterator<[K, V]>;
+
+  forEach(consumer: BinaryConsumer<K, V>): void;
 
   toMap(): Map<K, V>;
 

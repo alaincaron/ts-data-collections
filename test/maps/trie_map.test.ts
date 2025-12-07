@@ -316,13 +316,133 @@ describe('TrieMap', () => {
       map.put('bar', 2);
       map.put('foobar', 3);
       map.replaceValueIf(
-        ([k, _]) => k.length > 3,
-        v => v * 2
+        (k, _) => k.length > 3,
+        (_, v) => v * 2
       );
       expect(map.size()).to.equal(3);
       expect(map.get('foo')).equal(1);
       expect(map.get('bar')).equal(2);
       expect(map.get('foobar')).equal(6);
+    });
+  });
+
+  describe('putIfAbsent', () => {
+    it('should return the value present in the map', () => {
+      const map = new TrieMap<number>();
+      map.put('foo', 12);
+      expect(map.putIfAbsent('foo', 25)).equal(12);
+      expect(map.get('foo')).equal(12);
+      expect(map.size()).equal(1);
+    });
+    it('should put the value if not present in the map', () => {
+      const map = new TrieMap<number>();
+      expect(map.putIfAbsent('bar', 25)).to.be.undefined;
+      expect(map.get('bar')).equal(25);
+      expect(map.size()).equal(1);
+    });
+  });
+
+  describe('replace', () => {
+    it('should replace existing value for existing key', () => {
+      const map = new TrieMap<number>();
+      map.put('foo', 5);
+      expect(map.replace('foo', 4)).equal(5);
+      expect(map.get('foo')).equal(4);
+      expect(map.size()).equal(1);
+    });
+    it('should not modify non existing key', () => {
+      const map = new TrieMap<number>();
+      expect(map.replace('bar', 4)).to.be.undefined;
+      expect(map.get('bar')).to.be.undefined;
+      expect(map.isEmpty()).to.be.true;
+    });
+  });
+
+  describe('replaceValue', () => {
+    it('should replace value for existing key with matching value', () => {
+      const map = new TrieMap<number>();
+      map.put('foo', 5);
+      expect(map.replaceValue('foo', 5, 4)).to.be.true;
+      expect(map.get('foo')).equal(4);
+      expect(map.size()).equal(1);
+    });
+    it('should not modify for existing key with non-matching value', () => {
+      const map = new TrieMap<number>();
+      map.put('foo', 5);
+      expect(map.replaceValue('foo', 6, 4)).to.be.false;
+      expect(map.get('foo')).equal(5);
+      expect(map.size()).equal(1);
+    });
+    it('should not modify non existing key', () => {
+      const map = new TrieMap<number>();
+      expect(map.replaceValue('bar', 4, 6)).to.be.false;
+      expect(map.get('bar')).to.be.undefined;
+      expect(map.isEmpty()).to.be.true;
+    });
+  });
+
+  describe('replaceAll', () => {
+    it('should double all values', () => {
+      const map = new TrieMap<number>();
+      map.put('foo', 1);
+      map.put('bar', 2);
+      map.put('foobar', 3);
+      map.replaceAll((_, v) => v * 2);
+      expect(map.size()).to.equal(3);
+      expect(map.get('foo')).equal(2);
+      expect(map.get('bar')).equal(4);
+      expect(map.get('foobar')).equal(6);
+    });
+  });
+
+  describe('computeIfAbsent', () => {
+    it('should use the mapper to create a missing mapping', () => {
+      const map = new TrieMap<number>();
+      expect(map.computeIfAbsent('foo', _ => 0)).equal(0);
+      expect(map.size()).equal(1);
+      expect(map.get('foo')).equal(0);
+    });
+
+    it('should ignore use the result of the mapper returns null/undefined', () => {
+      const map = new TrieMap<number>();
+      expect(map.computeIfAbsent('foo', _ => undefined)).to.be.undefined;
+      expect(map.size()).equal(0);
+      expect(map.computeIfAbsent('foo', _ => null)).to.be.undefined;
+      expect(map.isEmpty()).to.be.true;
+    });
+    it('should ignore the mapper if the key is present', () => {
+      const map = new TrieMap<number>();
+      map.put('foo', 12);
+      expect(map.computeIfAbsent('foo', () => 0)).equal(12);
+      expect(map.size()).equal(1);
+      expect(map.get('foo')).equal(12);
+    });
+  });
+
+  describe('computeIfPresent', () => {
+    it('should ignpore the mapper if missing key', () => {
+      const map = new TrieMap<number>();
+      expect(map.computeIfPresent('foo', _ => 0)).to.be.undefined;
+      expect(map.isEmpty()).to.be.true;
+    });
+    it('should remove the key if mapper returns undefined', () => {
+      const map = new TrieMap<number>();
+      map.put('foo', 15);
+      expect(map.computeIfPresent('foo', _ => undefined)).to.be.undefined;
+      expect(map.isEmpty()).to.be.true;
+    });
+    it('should remove the key if mapper returns null', () => {
+      const map = new TrieMap<number>();
+      map.put('foo', 15);
+      expect(map.computeIfPresent('foo', _ => null)).to.be.undefined;
+      expect(map.size()).equal(0);
+    });
+    it('should update the value with resulve of mapper', () => {
+      const map = new TrieMap<number>();
+      map.put('foo', 12);
+      expect(map.computeIfPresent('foo', () => 0)).equal(0);
+      expect(map.size()).equal(1);
+      expect(map.get('foo')).equal(0);
     });
   });
 });

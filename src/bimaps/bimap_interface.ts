@@ -1,4 +1,4 @@
-import { FluentIterator, Predicate } from 'ts-fluent-iterators';
+import { BinaryPredicate, FluentIterator, Predicate } from 'ts-fluent-iterators';
 import { MapEntry, MapLike, MutableMap, OfferResult } from '../maps';
 import { Container } from '../utils';
 
@@ -49,7 +49,7 @@ export interface MutableBiMap<K, V> extends ReadOnlyBiMap<K, V> {
 
   filterValues(predicate: Predicate<V>): number;
 
-  filterEntries(predicate: Predicate<[K, V]>): number;
+  filterEntries(predicate: BinaryPredicate<K, V>): number;
   clear(): MutableBiMap<K, V>;
 
   clone(): MutableBiMap<K, V>;

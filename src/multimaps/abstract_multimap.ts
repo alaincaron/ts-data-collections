@@ -1,4 +1,12 @@
-import { Constructor, FlattenCollector, FluentIterator, Generators, iterator, Predicate } from 'ts-fluent-iterators';
+import {
+  BinaryPredicate,
+  Constructor,
+  FlattenCollector,
+  FluentIterator,
+  Generators,
+  iterator,
+  Predicate,
+} from 'ts-fluent-iterators';
 import { MultiMapLike, MutableMultiMap } from './mutable_multimap';
 import { MutableCollection } from '../collections';
 import {
@@ -54,10 +62,10 @@ export abstract class AbstractMultiMap<K, V> extends AbstractContainer implement
   }
 
   abstract filterKeys(predicate: Predicate<K>): number;
-  abstract filterEntries(predicate: Predicate<[K, V]>): number;
+  abstract filterEntries(predicate: BinaryPredicate<K, V>): number;
 
   filterValues(predicate: Predicate<V>): number {
-    return this.filterEntries(([_, v]) => predicate(v));
+    return this.filterEntries((_, v) => predicate(v));
   }
 
   *keys(): IterableIterator<K> {
